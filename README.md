@@ -71,15 +71,15 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Laravel
 
 # 1-Create project with Composer
-composer create-project laravel/laravel libreria
+- composer create-project laravel/laravel libreria
 
 # 2-Create and delete migration tables
-php artisan make:migration categorias
-php artisan migrate
+- php artisan make:migration categorias
+- php artisan migrate
 
 # 2a-Fix table lenght migration(OPCIONAL)
-1-php artisan db:wipe
-2-app\Providers\AppServiceProvider.php
+- 1-php artisan db:wipe
+- 2-app\Providers\AppServiceProvider.php
 
 use Illuminate\Support\Facades\Schema;
 /**
@@ -93,21 +93,21 @@ public function boot()
 }
 
 # 3-Correr project server
-php artisan serve
+- php artisan serve
 
 # 4-Composer Login Generator
-1-composer require laravel/ui --dev
-2-php artisan ui bootstrap
-2-php artisan ui bootstrap --auth
-3-npm install
-4-npm run dev
-5-php artisan serve
+- 1-composer require laravel/ui --dev
+- 2-php artisan ui bootstrap
+- 2-php artisan ui bootstrap --auth
+- 3-npm install
+- 4-npm run dev
+- 5-php artisan serve
 
 # 5-Composer CRUD Generator
-1-composer require ibex/crud-generator --dev
-2-php artisan vendor:publish --tag=crud
-3-php artisan make:crud categorias
-4-php artisan make:crud libros
+- 1-composer require ibex/crud-generator --dev
+- 2-php artisan vendor:publish --tag=crud
+- 3-php artisan make:crud categorias
+- 4-php artisan make:crud libros
 
 # 6-CRUD Access
 Paso 1
@@ -133,8 +133,8 @@ Agregar las dos listas
                     </ul>
 
 # 6-a Fix Login Bootstrap Styles and Js (OPCIONAL)
-1-npm i vue-loader
-2-npm run dev
+- 1-npm i vue-loader
+- 2-npm run dev
 
 # 7-Select de relacion del CRUD con tablas relacionadas
 MODIFICACION CONTROLADOR
