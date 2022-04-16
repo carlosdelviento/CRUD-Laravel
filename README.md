@@ -62,3 +62,140 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Setup and commands for CRUD
+
+# Laravel 8 Sheets for Libreria CRUD's
+
+# Database MySQL
+Laravel
+
+# 1-Create project with Composer
+composer create-project laravel/laravel libreria
+
+# 2-Create and delete migration tables
+php artisan make:migration categorias
+php artisan migrate
+
+# 2a-Fix table lenght migration(OPCIONAL)
+1-php artisan db:wipe
+2-app\Providers\AppServiceProvider.php
+
+use Illuminate\Support\Facades\Schema;
+/**
+ * Bootstrap any application services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    Schema::defaultStringLength(191); 
+}
+
+# 3-Correr project server
+php artisan serve
+
+# 4-Composer Login Generator
+1-composer require laravel/ui --dev
+2-php artisan ui bootstrap
+2-php artisan ui bootstrap --auth
+3-npm install
+4-npm run dev
+5-php artisan serve
+
+# 5-Composer CRUD Generator
+1-composer require ibex/crud-generator --dev
+2-php artisan vendor:publish --tag=crud
+3-php artisan make:crud categorias
+4-php artisan make:crud libros
+
+# 6-CRUD Access
+Paso 1
+routes/web.php
+
+Route::resource('libros', App\Http\Controllers\LibroController::class);
+Route::resource('categorias', App\Http\Controllers\CategoriaController::class);
+
+Paso 2
+resources\views\layouts\app.blade.php
+Agregar las dos listas
+ <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav me-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('libros.index') }}">{{ __('Libros') }}</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('categorias.index') }}">{{ __('Categorias') }}</a>
+                        </li>
+                    
+                    </ul>
+
+# 6-a Fix Login Bootstrap Styles and Js (OPCIONAL)
+1-npm i vue-loader
+2-npm run dev
+
+# 7-Select de relacion del CRUD con tablas relacionadas
+MODIFICACION CONTROLADOR
+app\Http\Controllers\LibroController.php
+
+public function create()
+    {
+        $libro = new Libro();
+        $categorias= Categoria::pluck('nombre','id');
+        return view('libro.create', compact('libro','categorias'));
+    }
+
+public function edit($id)
+    {
+        $libro = Libro::find($id);
+        $categorias= Categoria::pluck('nombre','id');
+        return view('libro.edit', compact('libro','categorias'));
+    }
+MODIFICACION VISTA
+resources\views\libro\form.blade.php
+
+(REMOVE CATEGORIA DUPLICADA)
+
+<div class="form-group">
+            {{ Form::label('categoria_id') }}
+            {{ Form::select('categoria_id', $categorias, $libro->categoria_id, ['class' => 'form-control' . ($errors->has('categoria_id') ? ' is-invalid' : ''), 'placeholder' => 'Categoria Id']) }}
+            {!! $errors->first('categoria_id', '<div class="invalid-feedback">:message</div>') !!}
+ </div>
+
+resources\views\libro\index.blade.php
+
+CAMBIAR
+
+<th>categoria_id</th>
+
+POR
+<th>Categoría</th>
+
+{{ $libro->categoria_id }}
+POR
+{{ $libro->categoria->nombre }}
+
+8-Ajustes finales
+SECURITY ACCESS
+routes\web.php
+
+Route::resource('libros', App\Http\Controllers\LibroController::class)->middleware('auth');
+Route::resource('categorias', App\Http\Controllers\CategoriaController::class)->middleware('auth');
+
+resources\views\layouts\app.blade.php
+
+<!-- Left Side Of Navbar -->
+ @if (Auth::check())
+<ul class="navbar-nav me-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('libros.index') }}">{{ __('Libros') }}</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('categorias.index') }}">{{ __('Categorias') }}</a>
+                        </li>
+</ul>
+@endif
